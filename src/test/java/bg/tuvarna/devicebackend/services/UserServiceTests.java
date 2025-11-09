@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
@@ -94,7 +95,10 @@ public class UserServiceTests {
                 .role(UserRole.USER)
                 .id(2L)
                 .build();
-        userRepository.save(user);
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user));
+        when(userRepository.save(org.mockito.ArgumentMatchers.any(User.class))).thenReturn(user);
+        when(passwordEncoder.matches("abc", "abc")).thenReturn(true);
+        when(passwordEncoder.encode("test")).thenReturn("encodedTest");
         assertDoesNotThrow(() -> userService.updatePassword(2L, new ChangePasswordVO("abc", "test")));
     }
     @Test
@@ -108,7 +112,8 @@ public class UserServiceTests {
                 .role(UserRole.ADMIN)
                 .id(2L)
                 .build();
-        userRepository.save(user);
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user));
+        when(userRepository.save(org.mockito.ArgumentMatchers.any(User.class))).thenReturn(user);
         CustomException ex = assertThrows(
                 CustomException.class,
                 () -> userService.updatePassword(2L,new ChangePasswordVO("abc","def"))
@@ -123,10 +128,10 @@ public class UserServiceTests {
                 .phone("+222")
                 .email("test@test.com")
                 .address("address")
-                .role(UserRole.ADMIN)
                 .id(2L)
                 .build();
-        userRepository.save(user);
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user));
+        when(userRepository.save(org.mockito.ArgumentMatchers.any(User.class))).thenReturn(user);
         CustomException ex = assertThrows(
                 CustomException.class,
                 () -> userService.updatePassword(2L,new ChangePasswordVO("aaa","def"))
@@ -144,7 +149,7 @@ public class UserServiceTests {
                 .role(UserRole.USER)
                 .id(1L)
                 .build();
-        userRepository.save(user);
+        when(userRepository.save(org.mockito.ArgumentMatchers.any(User.class))).thenReturn(user);
         User user1 = User.builder()
                 .fullName("petar")
                 .password("abcd")
@@ -154,7 +159,9 @@ public class UserServiceTests {
                 .role(UserRole.USER)
                 .id(2L)
                 .build();
-        userRepository.save(user1);
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user1));
+        when(userRepository.save(org.mockito.ArgumentMatchers.any(User.class))).thenReturn(user1);
+        when(userRepository.getByEmail("ivan@test.com")).thenReturn(user);
         CustomException ex = assertThrows(
                 CustomException.class,
                 () -> userService.updateUser(2L,new UserUpdateVO("petar","address2","+234","ivan@test.com"))
@@ -172,7 +179,8 @@ public class UserServiceTests {
                 .role(UserRole.USER)
                 .id(1L)
                 .build();
-        userRepository.save(user);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.save(org.mockito.ArgumentMatchers.any(User.class))).thenReturn(user);
         User user1 = User.builder()
                 .fullName("petar")
                 .password("abcd")
@@ -182,7 +190,9 @@ public class UserServiceTests {
                 .role(UserRole.USER)
                 .id(2L)
                 .build();
-        userRepository.save(user1);
+        when(userRepository.findById(2L)).thenReturn(Optional.of(user1));
+        when(userRepository.save(org.mockito.ArgumentMatchers.any(User.class))).thenReturn(user1);
+        when(userRepository.getByPhone("+222")).thenReturn(user);
         CustomException ex = assertThrows(
                 CustomException.class,
                 () -> userService.updateUser(2L,new UserUpdateVO("petar","address2","+222","petar@test.com"))
