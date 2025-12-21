@@ -47,19 +47,6 @@ class RegisterAndLoginTests {
 
     private static String token;
 
-//    @Container
-//    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")
-//            .withDatabaseName("testdb")
-//            .withUsername("test")
-//            .withPassword("test");
-//
-//    @DynamicPropertySource
-//    static void config(DynamicPropertyRegistry registry) {
-//        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-//        registry.add("spring.datasource.username", postgres::getUsername);
-//        registry.add("spring.datasource.password", postgres::getPassword);
-//        registry.add("spring.datasource.driver-class-name", () -> "org.postgresql.Driver");
-//    }
 
     @BeforeEach
     void init() {
